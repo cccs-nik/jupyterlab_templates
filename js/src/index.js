@@ -73,9 +73,18 @@ export class OpenTemplateWidget extends Widget {
   getValue = () => this.node.getElementsByTagName("select")[1].value;
 }
 
+export const REQUEST_OPTIONS = {
+  blob: false,
+  headers: {
+    Accept: "application/json, text/javascript, text/plain",
+  },
+  ignoreCache: false,
+  timeout: 60000,
+};
+
 function activate(app, menu, browser, launcher) {
   // grab templates from serverextension
-  request("get", `${PageConfig.getBaseUrl()}templates/names`).then((res) => {
+  request("get", `${PageConfig.getBaseUrl()}templates/names`, {}, null, REQUEST_OPTIONS).then((res) => {
     if (res.ok) {
       templates = res.json();
 
@@ -173,8 +182,8 @@ const extension = {
   activate,
   autoStart: true,
   id: "jupyterlab_templates",
-  optional: [ILauncher],
-  requires: [IMainMenu, IFileBrowserFactory],
+  optional: [],
+  requires: [IMainMenu, IFileBrowserFactory, ILauncher],
 };
 
 export default extension;
